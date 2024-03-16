@@ -1,11 +1,14 @@
-function HomePage (){
+import { Box } from "@mantine/core"
+import { Outlet } from "react-router-dom"
+
+function HomePage() {
 
       return (
-           <>
-
-            <h1>Home Page</h1>
-           
-        </>
+            <>
+                  <Box>
+                        <Outlet />
+                  </Box>
+            </>
       )
 }
 
