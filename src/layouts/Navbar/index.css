@@ -1,0 +1,19 @@
+.element {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 10px;
+  width: auto;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.element:hover {
+  background-color: #343434;
+}
+.menu {
+    color: whitesmoke; 
+}
+.menu:hover {
+  background-color: #28282B;
+}

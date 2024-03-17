@@ -1,44 +1,55 @@
-import api from "../../../../lib/Axios"
-import useAuthHook from "../../../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Box } from "@mantine/core";
+import Navbar from "../../../../layouts/Navbar";
+import Products from "../../../../components/products";
+import useProductHook from "../../../../hooks/useProduct";
 import { AuthActions } from "../../../../lib/Redux/Slices";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 
 function UserDashboard() {
-
-    const { Logout } = useAuthHook()
-    const navigate = useNavigate()
+    
+    const {viewProduct} = useProductHook()
     const dispatch = useDispatch()
-    const user = useSelector((state)=> state.AuthSlice.user)
+    const navigate = useNavigate()
 
-    const handleverify = async () => {
-        const response = await api.get(`/verifycheck`)
-        console.log(response, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+    const products = useSelector((state) => state?.AuthSlice?.product)
+
+    const viewproduct = async(id)=>{ 
+        const response = await viewProduct(id)
+        dispatch(AuthActions.addsingleProduct(response))
+        navigate("/viewproduct")
     }
-
-    const handlelogout = async () => {
-        const response = await Logout()
-        dispatch(AuthActions.removeUser())
-        if(response.status === 200){
-              navigate("/signin")
-        }        
-    }
-
-    useEffect(()=>{
-        if(!user){
-            navigate("/signin")
-       }
-    },[navigate,user])
-
+    
 
     return (
         <>
-            <h1>UserDashboard</h1>
 
-            <button onClick={handleverify}>verifyUser</button>
-            <button onClick={handlelogout}>Logout</button>
+            <>
+                <Navbar />
+
+                <Box
+                    style={{
+                        marginTop: "70px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "30px"
+                    }}
+                >
+
+                    {
+                        products?.map((product)=>{
+                            return (
+                                <Box key={product._id} onClick={()=>viewproduct(product._id)} >
+                                    <Products    product ={product}/>  
+                                </Box>
+                            )
+
+                        })
+                    }
+                </Box>
+            </>
         </>
     )
 }
